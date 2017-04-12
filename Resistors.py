@@ -6,7 +6,7 @@ import math
 #E12 10%
 #NominalResistors_12 = [1.0,1.2,1.5,1.8,2.2,2.7,3.3,3.9,4.7,5.6,6.8,8.2]
 #E96 1%
-#NominalResistors_96 = [round(math.pow(10,i/96), 2) for i in range(96)] 
+#NominalResistors_96 = [round(math.pow(10,i/96), 2) for i in range(96)]
 #E24 5%
 NominalResistors = [1.0,1.1,1.2,1.3,1.5,1.6,1.8,2.0,2.2,2.4,2.7,3.0,3.3,3.6,3.9,4.3,4.7,5.1,5.6,6.2,6.8,7.5,8.2,9.1]
 DataNum = len(NominalResistors)
@@ -79,10 +79,10 @@ def Series(t_value):
             min = FindNearestValueSeries(t)
             v1 = AllNominalResistors[min[0]]
             AddMinToList(ResistorsSeries,[v1,i,min[1]])
-        else:
-            min = FindNearestValueSeries(t_value)
-            v1 = AllNominalResistors[min[0]]
-            AddMinToList(ResistorsSeries,[v1,0,min[1]])
+
+    min = FindNearestValueSeries(t_value)
+    v1 = AllNominalResistors[min[0]]
+    AddMinToList(ResistorsSeries,[v1,0,min[1]])
 
     for i in ResistorsSeries:
         if i[1]:
@@ -119,10 +119,11 @@ def Paralleling(t_value):
         if t > AllNominalResistors_1[0]:
             min = FindNearestValueParalleling(t)
             v1 = 1/AllNominalResistors_1[min[0]]
-
             AddMinToList(ResistorsParalleling,[v1,1/i,min[1]])
-        else:
-            AddMinToList(ResistorsParalleling,[1/i,None,abs(t_value_1 - i)])
+
+    min = FindNearestValueParalleling(t_value_1)
+    v1 = 1/AllNominalResistors_1[min[0]]
+    AddMinToList(ResistorsParalleling,[v1,None,min[1]])
 
     for i in ResistorsParalleling:
         if i[1]:
