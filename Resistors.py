@@ -139,7 +139,7 @@ if __name__ == "__main__":
             R_Value = float(str_Value)
             R_Value *= math.pow(10,r_value_exp)
 
-            r_exp = math.floor(math.log10(R_Value)) - 2
+            r_exp = math.floor(math.log10(R_Value)+0.5) - 2
             r_exp = math.pow(10,r_exp)
             ExResistors(r_exp)
             break
