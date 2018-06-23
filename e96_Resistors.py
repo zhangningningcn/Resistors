@@ -15,7 +15,7 @@ def GetInputString():
         if codestr == 'Q':
             return (3,None,None)
         if not re.match(r'^\d\d[A-FX-Z]$',codestr):
-            if not re.match(r'^\d+.?\d*[KM]?$',codestr):
+            if not re.match(r'^\d+\.?\d*[KM]?$',codestr):
                 print("输入代码有误，请重新输入")
                 continue
             s_type = 1
@@ -56,16 +56,46 @@ def EncodeResistorE96(code_num,code_exp):
     log_num = math.log10(R_Value)
     r_exp = math.floor(log_num)
     value = int((log_num - r_exp) * 96 + 0.5)
-    r_exp = int(r_exp) - 2
+    value2 = int((log_num - r_exp) * 96)
+    if value == value2:
+        #d_type = 1
+        value2 += 1
+    # else:
+        # d_type = 2
+    if value > 95:
+        r_exp1 = int(r_exp) - 1
+        value = 0
+    else:
+        r_exp1 = int(r_exp) - 2
+        
+    if value2 > 95:
+        r_exp2 = int(r_exp) - 1
+        value2 = 0
+    else:
+        r_exp2 = int(r_exp) - 2
     str_exp = None
     for k,v in CharacterExp.items():
-        if v == r_exp:
+        if v == r_exp1:
             str_exp = k
             break
     if str_exp == None:
         return "超范围"
     str_cpde = "{:0=2}{}".format(value+1,str_exp)
-    return str_cpde + '(' + DecodeResistorE96(float(value),float(r_exp)) + ')'
+    r_str = str_cpde + '(' + DecodeResistorE96(float(value),float(r_exp1)) + ')'
+    
+    value_x = round(math.pow(10,value/96),2) * math.pow(10,r_exp1+2)
+    if abs(R_Value - value_x)/R_Value < 0.005:
+        return r_str
+        
+    str_exp2 = None
+    for k,v in CharacterExp.items():
+        if v == r_exp2:
+            str_exp2 = k
+            break
+    if str_exp2 != None:
+        str_cpde2 = "{:0=2}{}".format(value2+1,str_exp2)
+        r_str += '\n' + str_cpde2 + '(' + DecodeResistorE96(float(value2),float(r_exp2)) + ')'
+    return r_str
 
 
 
